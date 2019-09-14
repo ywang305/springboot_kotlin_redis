@@ -1,0 +1,6 @@
+spring:
+  redis:   # RedisConnectionFactory.configuration
+    database: 0
+    host: localhost
+    port: 6379
+    password:
