@@ -11,18 +11,19 @@ import java.util.concurrent.atomic.AtomicLong
 class RedisController(private val redisTemplate: RedisTemplate<Any, Any>) {
     val atom = AtomicLong()
 
-    @GetMapping
-    fun get(id: Long?): Any? {
-        val isExist = redisTemplate.opsForHash<String,JobVar>().hasKey(id, "jobVar")
-        return if(isExist)
-            redisTemplate.opsForHash<Any,Any>().get(id, "jobVar")
-            else null
+    @GetMapping("/{id}")
+    fun get(@PathVariable id: Long): Any? {
+        val isExist = redisTemplate.opsForHash<String,JobVar>().hasKey(id, "jobvar")
+        return if(isExist) {
+            val result = redisTemplate.opsForHash<Any,Any>().get(id, "jobvar")
+            result
+        } else null
     }
 
     @PostMapping
-    fun post(@RequestBody jobVar: JobVar): ResponseEntity<Any> {
+    fun post(@RequestBody jobvar: JobVar): ResponseEntity<Any> {
         val uniqueId = atom.incrementAndGet()
-        redisTemplate.opsForHash<String,JobVar>().put(uniqueId, "jobVar", jobVar)
+        redisTemplate.opsForHash<String,JobVar>().put(uniqueId, "jobvar", jobvar)
         return ResponseEntity.ok().body(object{ val id = uniqueId})
     }
 }

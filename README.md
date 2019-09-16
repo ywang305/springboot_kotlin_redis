@@ -18,7 +18,7 @@ example:
   }
   ```
  
-- get http://localhost:8080/redis?id=2
+- get http://localhost:8080/redis/2
   expect
   ```
   {
